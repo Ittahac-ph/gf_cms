@@ -1,0 +1,34 @@
+   name: Build and Package
+
+   on:
+     push:
+       branches:
+         - main
+
+   jobs:
+     build:
+       runs-on: ubuntu-latest
+
+       steps:
+       - name: Checkout code
+         uses: actions/checkout@v2
+
+       - name: Set up Go
+         uses: actions/setup-go@v2
+         with:
+           go-version: 1.23
+
+       - name: Build project
+         run: |
+           go mod download
+           go build -o main .
+
+       - name: Package as tar
+         run: |
+           tar -czvf gf_cms.tar.gz main manifest/config/config.yaml
+
+       - name: Upload artifact
+         uses: actions/upload-artifact@v2
+         with:
+           name: gf_cms_package
+           path: gf_cms.tar.gz
