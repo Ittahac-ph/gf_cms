@@ -16,7 +16,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: '1.22.3'  # 或根据你的 go.mod 指定
+        go-version: '1.23.0' 
 
     - name: Build project
       run: |
