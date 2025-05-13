@@ -1,0 +1,74 @@
+server:
+  projectName: "gf_cms"
+  backendPrefix: "admin"
+  address: ":8080"
+  jwtKey: "qaz123123" # jwt密钥，不配置将使用projectName，为了安全一定要配置
+  openapiPath: "/api.json"
+  #  swaggerPath: "/swagger" #使用自定义SwaggerUI,需注释该行
+  serverRoot: "resource/public"
+  clientMaxBodySize: "50MB"
+  mobileHost: "" # 移动端域名,配置后将根据设备自动跳转,且mobile路由只能使用mobileHost域名访问
+  pcHost: "" # 配置移动端域名后,需要配置pc端域名,用来跳转,且pc路由只能使用pcHost域名访问
+  dumpRouterMap: true               # 是否在Server启动时打印所有的路由列表。默认为true
+  graceful: false              # 是否开启平滑重启特性，开启时将会在本地增加10000的本地TCP端口用于进程间通信。默认false
+  gracefulTimeout: 2                  # 父进程在平滑重启后多少秒退出，默认2秒。若请求耗时大于该值，可能会导致请求中断
+  cacheDriver: "redis"                # 缓存驱动方式，支持redis和memory两种，默认memory
+
+database:
+  default:
+    type: "mysql"
+    debug: "true"
+    dryRun: "false"
+    prefix: "cms_"
+    removePrefix: "cms_"
+    charset: "utf8mb4"
+    maxIdle: "0"       #连接池最大闲置的连接数
+    maxOpen: "10"      #连接池最大打开的连接数
+    maxLifetime: "30s"  #连接对象可重复使用的时间长度
+    host: "127.0.0.1"
+    port: "3306"
+    user: "root"
+    pass: "a123456"
+    name: "gf_cms"
+    timezone: "Local"
+redis:
+  default:
+    address: 127.0.0.1:6379
+    db: 0
+    maxActive: 50 #最大连接数量限制(0表示不限制)
+
+logger:
+  level: "all"            # 日志输出级别
+  path: "./log/"          # 日志文件路径。默认为空，表示关闭，仅输出到终端
+  file: "{Y-m-d}.log"     # 日志文件格式。默认为"{Y-m-d}.log"
+  ctxKeys: [ ]            # 自定义Context上下文变量名称，自动打印Context的变量到日志中。默认为空
+  header: true            # 是否打印日志的头信息。默认true
+  stdout: true            # 日志是否同时输出到终端。默认true
+  rotateSize: 0             # 按照日志文件大小对文件进行滚动切分。默认为0，表示关闭滚动切分特性
+  rotateExpire: 0             # 按照日志文件时间间隔对文件滚动切分。默认为0，表示关闭滚动切分特性
+  rotateBackupLimit: 0             # 按照切分的文件数量清理切分文件，当滚动切分特性开启时有效。默认为0，表示不备份，切分则删除
+  rotateBackupExpire: 0             # 按照切分的文件有效期清理切分文件，当滚动切分特性开启时有效。默认为0，表示不备份，切分则删除
+  rotateBackupCompress: 0             # 滚动切分文件的压缩比（0-9）。默认为0，表示不压缩
+  rotateCheckInterval: "1h"          # 滚动切分的时间检测间隔，一般不需要设置。默认为1小时
+  stdoutColorDisabled: false         # 关闭终端的颜色打印。默认开启
+  writerColorEnable: false         # 日志文件是否带上颜色。默认false，表示不带颜色
+
+gfcli:
+  build:
+    name: "gfCms"
+    arch: "amd64"
+#    system: "darwin"
+    system: "linux"
+    mod: "none"
+    cgo: 0
+    packSrc: "manifest/config,resource/public/resource,resource/template,resource/i18n"
+#    packSrc: "resource,manifest"
+    packDst: "internal/packed/build_pack_data.go"
+    version: ""
+    path: "temp"
+    extra: ""
+  docker:
+    build: "-a amd64 -s linux -p temp -ew"
+    tagPrefixes:
+      - "demozx"
+    tagName: "gf_cms"
